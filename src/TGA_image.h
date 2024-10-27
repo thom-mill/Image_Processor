@@ -52,6 +52,7 @@ struct Image {
     Image subtract(const Image& other);
     void add(int color_index, int scale);
     Image overlay(const Image& other);
+    void gray_scale();
 
     //BIG 3
     Image(const Image& other);

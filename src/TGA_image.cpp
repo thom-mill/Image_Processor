@@ -127,9 +127,6 @@ void Image::combine_channels(Image& blue, Image& green, Image& red) {
 
 void Image::rotate_180() {
     std::vector<std::vector<unsigned char> > flipped_grid(num_Pixels);
-    // for(int i = 0; i < num_Pixels; i++) {
-    //     flipped_grid[i].resize(3);
-    // }
         for(int i = 0; i < num_Pixels; i++) {
             std::vector<unsigned char> rgb(3);
             rgb[0] = grid[num_Pixels - 1 - i][0];
@@ -253,10 +250,20 @@ Image Image::overlay(const Image& other) {
     result.setPixels(new_grid);
     return result;
 }
+
+void Image::gray_scale() {
+    for(int i = 0; i < num_Pixels; i++) {
+        int sum = static_cast<int>(grid[i][0]) + static_cast<int>(grid[i][1]) + static_cast<int>(grid[i][2]);
+        int average = 0.5f + sum / 3;
+        grid[i][0] = static_cast<unsigned char>(average);
+        grid[i][1] = static_cast<unsigned char>(average);
+        grid[i][2] = static_cast<unsigned char>(average);
+    }
+}
 //debugging purposes
 void Image::print_values() const {
-    for(int i = 0; i < 10; i++) {
-        std::cout << (int)grid[i][0] << ", " << (int)grid[i][1] << ", " << (int)grid[i][2] << std::endl;
+    for(int i = 0; i < 200; i++) {
+        std::cout << static_cast<int>(grid[i][0]) << ", " << static_cast<int>(grid[i][1]) << ", " << static_cast<int>(grid[i][2]) << std::endl;
     }
 }
 //================================================
