@@ -8,14 +8,14 @@ void task1() {
     Image layer1("src/input/layer1.tga");
     Image pattern1("src/input/pattern1.tga");
     Image resultOfTask1 = layer1.multiply(pattern1);
-    resultOfTask1.write("src/output/part1.tga");
+    resultOfTask1.write("output/part1.tga");
 }
 
 void task2() {
     Image car("src/input/car.tga");
     Image layer2("src/input/layer2.tga");
     Image task2 = car.subtract(layer2);
-    task2.write("src/output/part2.tga");
+    task2.write("output/part2.tga");
 }
 
 void task3() {
@@ -24,7 +24,7 @@ void task3() {
     Image text("src/input/text.tga");
     Image blend = layer1.multiply(pattern2);
     Image resultOfTask3 = blend.screen(text);
-    resultOfTask3.write("src/output/part3.tga");
+    resultOfTask3.write("output/part3.tga");
 }
 
 void task4() {
@@ -33,27 +33,27 @@ void task4() {
     Image pattern2("src/input/pattern2.tga");
     Image combine = layer2.multiply(circles);
     Image resultOfTask4 = combine.subtract(pattern2);
-    resultOfTask4.write("src/output/part4.tga");
+    resultOfTask4.write("output/part4.tga");
 }
 
 void task5() {
     Image layer1("src/input/layer1.tga");
     Image pattern1("src/input/pattern1.tga");
     Image result = layer1.overlay(pattern1);
-    result.write("src/output/part5.tga");
+    result.write("output/part5.tga");
 }
 
 void task6() {
     Image car("src/input/car.tga");
     car.add(1, 200);
-    car.write("src/output/part6.tga");
+    car.write("output/part6.tga");
 }
 
 void task7() {
     Image car("src/input/car.tga");
     car.multiply(2, 4);
     car.multiply(0, 0);
-    car.write("src/output/part7.tga");
+    car.write("output/part7.tga");
 }
 
 void task8() {
@@ -87,9 +87,9 @@ void task8() {
     greenFile.setPixels(greenPix);
     blueFile.setPixels(redPix);
 
-    redFile.write("src/output/part8_r.tga");
-    greenFile.write("src/output/part8_g.tga");
-    blueFile.write("src/output/part8_b.tga");
+    redFile.write("output/part8_r.tga");
+    greenFile.write("output/part8_g.tga");
+    blueFile.write("output/part8_b.tga");
 }
 
 void task9() {
@@ -99,13 +99,13 @@ void task9() {
     Image combined;
     combined.setHeader(blue._header);
     combined.combine_channels(blue,green,red);
-    combined.write("src/output/part9.tga");
+    combined.write("output/part9.tga");
 }
 
 void task10() {
     Image text2("src/input/text2.tga");
     text2.rotate_180();
-    text2.write("src/output/part10.tga");
+    text2.write("output/part10.tga");
 }
 //make directory
 bool directory_exists(const std::string& path) {
@@ -118,8 +118,8 @@ void create_directory(const std::string& path) {
 }
 int main()
 {
-    if(!directory_exists("src/output")) {
-        create_directory("src/output");
+    if(!directory_exists("output")) {
+        create_directory("output");
     }
 
     task1();
