@@ -83,9 +83,9 @@ void task8() {
         greenPix[i] = green_vec;
         redPix[i] = red_vec;
     }
-    redFile.setPixels(bluePix);
+    blueFile.setPixels(bluePix);
     greenFile.setPixels(greenPix);
-    blueFile.setPixels(redPix);
+    redFile.setPixels(redPix);
 
     redFile.write("output/part8_r.tga");
     greenFile.write("output/part8_g.tga");
