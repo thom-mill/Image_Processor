@@ -3,6 +3,7 @@
 #include <vector>
 #include "TGA_image.h"
 #include <sys/stat.h>
+#include <cstring>
 
 void task1() {
     Image layer1("src/input/layer1.tga");
@@ -116,22 +117,29 @@ bool directory_exists(const std::string& path) {
 void create_directory(const std::string& path) {
     mkdir(path.c_str(), S_IRWXU);
 }
-int main()
+
+
+// ======COMMAND LINE INTERFACE=============
+void help_message() {
+    std::cout << "Project 2: Image Processing, Fall 2023" << std::endl;
+    std::cout << "Usage:" << std::endl;
+    std::cout << '\t' << "./project2.out [output] [firstImage] [method] [...]" << std::endl;
+}
+
+int main(int argc, char* argv[])
 {
     if(!directory_exists("output")) {
         create_directory("output");
     }
 
-    task1();
-    task2();
-    task3();
-    task4();
-    task5();
-    task6();
-    task7();
-    task8();
-    task9();
-    task10();
+    if(argc == 1 || strcmp(argv[1], "--help") == 0) {
+        help_message();
+    }
+
+    
+
+
+
 
     return 0;
 }
