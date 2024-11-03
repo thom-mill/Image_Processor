@@ -212,6 +212,7 @@ std::string error_message(const std::string& filePath) {
 
 int main(int argc, char* argv[])
 {
+
     if(!directory_exists("output")) {
         create_directory("output");
     }
@@ -232,15 +233,17 @@ int main(int argc, char* argv[])
         std::cerr << "Invalid file name." << std::endl;
         return 1;
     }
+
     std::string two_image_ops[4] = {"multiply", "subtract", "overlay", "screen"};
     std::string one_image_ops[4] = {"flip", "onlyred", "onlygreen", "onlyblue"};
     std::string integer_ops[6] = {"addred", "addgreen", "addblue", "scalered", "scalegreen", "scaleblue"};
+
     Image first;//initalize the base layer before entering the while loop scope
     if(file_exists(args[2])) {
         first = Image(args[2]);
     }
     else {
-        error_message(args[2]);
+        std::cerr << error_message(args[2]) << std::endl;
         return 1;
     }
 
