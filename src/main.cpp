@@ -220,7 +220,6 @@ std::string error_message(const std::string& filePath, bool type = 0) {
 
 int main(int argc, char* argv[])
 {
-
     if(!directory_exists("output")) {
         create_directory("output");
     }
