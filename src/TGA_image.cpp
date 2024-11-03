@@ -147,7 +147,7 @@ void Image::only_red() {
 void Image::only_green() {
     for(int i = 0; i < num_Pixels; i++) {
         grid[i][0] = grid[i][1];
-        grid[i][2] = grid[i][2];
+        grid[i][2] = grid[i][1];
     }
 }
 void Image::only_blue() {
