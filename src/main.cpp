@@ -304,8 +304,10 @@ int main(int argc, char* argv[])
                 i += 3;
             }
             else {
-                error_message(args[i+1]);
-                error_message(args[i+2]);
+                if(!file_exists(args[i+1]))
+                    std::cerr << error_message(args[i+1], 1) << std::endl;
+                if(!file_exists(args[i+2]))
+                    std::cerr << error_message(args[i+2], 1) << std::endl;;
                 return 1;
             }
         }
@@ -314,6 +316,6 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-    first.write(args[1]);
+    first.write(args[1]); // write the final image
     return 0;
 }
