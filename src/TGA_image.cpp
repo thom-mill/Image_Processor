@@ -306,8 +306,16 @@ Image& Image::operator=(const Image& other) {
     }
     _header = other._header;
     num_Pixels = other.num_Pixels;
-    for(int i = 0; i < num_Pixels; i++) {
-        grid.push_back(other.grid[i]);
+    if(grid.size() == num_Pixels) {
+        for(int i = 0; i < num_Pixels; i++) {
+            grid[i] = other.grid[i];
+        }
+    } else {
+        grid.reserve(num_Pixels);
+        for(int i = 0; i < num_Pixels; i++) {
+            grid[i] = other.grid[i];
+        }
+
     }
     return *this;
 }
