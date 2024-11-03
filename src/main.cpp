@@ -122,7 +122,7 @@ void create_directory(const std::string& path) {
 
 // ======COMMAND LINE INTERFACE=============
 void help_message() {
-    std::cout << "Project 2: Image Processing, Fall 2023" << std::endl;
+    std::cout << "Project 2: Image Processing, Fall 2024" << std::endl << std::endl;
     std::cout << "Usage:" << std::endl;
     std::cout << '\t' << "./project2.out [output] [firstImage] [method] [...]" << std::endl;
 }
