@@ -53,6 +53,9 @@ struct Image {
     void add(int color_index, int scale);
     Image overlay(const Image& other);
     void gray_scale();
+    void only_red();
+    void only_green();
+    void only_blue();
 
     //BIG 3
     Image(const Image& other);

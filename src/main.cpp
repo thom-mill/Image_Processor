@@ -3,6 +3,7 @@
 #include <vector>
 #include "TGA_image.h"
 #include <sys/stat.h>
+#include <algorithm>
 #include <cstring>
 
 void task1() {
@@ -126,20 +127,174 @@ void help_message() {
     std::cout << '\t' << "./project2.out [output] [firstImage] [method] [...]" << std::endl;
 }
 
+Image flow_control(std::string operation, Image& bottom, const Image& top = Image()) {
+    if(operation == "multiply") {
+        return bottom.multiply(top);
+    }
+    if(operation == "subtract") {
+        return bottom.subtract(top);
+    }
+    if(operation == "overlay") {
+        return bottom.overlay(top);
+    }
+    if(operation == "screen") {
+        return bottom.screen(top);
+    }
+    if(operation == "flip") {
+        bottom.rotate_180();
+        return bottom;
+    }
+    if(operation == "onlyred") {
+        bottom.only_red();
+        return bottom;
+    }
+    if(operation == "onlygreen") {
+        bottom.only_green();
+        return bottom;
+    }
+    if(operation == "onlyblue") {
+        bottom.only_blue();
+        return bottom;
+    }
+    else {
+        return bottom;
+    }
+}
+
+Image scale_ops(std::string operation, Image& bottom, int scale) {
+    if(operation == "addred") {
+        bottom.add(2, scale);
+        return bottom;
+    }
+    if(operation == "addgreen") {
+        bottom.add(1, scale);
+        return bottom;
+    }
+    if(operation == "addblue") {
+        bottom.add(0, scale);
+        return bottom;
+    }
+    if(operation == "scalered") {
+        bottom.multiply(2, scale);
+        return bottom;
+    }
+    if(operation == "scalegreen") {
+        bottom.multiply(1, scale);
+        return bottom;
+    }
+    if(operation == "scaleblue") {
+        bottom.multiply(0, scale);
+        return bottom;
+    }
+    else {
+        return bottom;
+    }
+
+}
+
+bool file_exists(const std::string& path) {
+    struct stat info;
+    // Use stat to get information about the path
+    if (stat(path.c_str(), &info) != 0) {
+        return false; // Path does not exist or error occurred
+    }
+
+    // Check if it is a regular file
+    return (info.st_mode & S_IFREG) != 0;
+}
+
+std::string error_message(const std::string& filePath) {
+    if(filePath.substr(filePath.size() - 4, 4) != ".tga") {
+        return "Invalid file name.";
+    }
+    return "File does not exist." ;
+}
+
 int main(int argc, char* argv[])
 {
     if(!directory_exists("output")) {
         create_directory("output");
     }
 
-    if(argc == 1 || strcmp(argv[1], "--help") == 0) {
-        help_message();
+    std::vector<std::string> args;
+    for(int i = 0; i < argc; i++) {
+        args.push_back(argv[i]);
     }
 
-    
+    //handle help
+    if(argc == 1 || args[1] == "--help") {
+        help_message();
+        return 0;
+    }
 
+    std::string output_name = args[1];
+    if(output_name.size() <= 4 || output_name.substr(output_name.size() - 4, 4) != ".tga") {
+        std::cerr << "Invalid file name." << std::endl;
+        return 1;
+    }
+    std::string two_image_ops[4] = {"multiply", "subtract", "overlay", "screen"};
+    std::string one_image_ops[4] = {"flip", "onlyred", "onlygreen", "onlyblue"};
+    std::string integer_ops[6] = {"addred", "addgreen", "addblue", "scalered", "scalegreen", "scaleblue"};
+    Image first;//initalize the base layer before entering the while loop scope
+    if(file_exists(args[2])) {
+        first = Image(args[2]);
+    }
+    else {
+        error_message(args[2]);
+        return 1;
+    }
 
+    int i = 3;
+    while(i < argc) {
+        //check if the operation requires two images
+        if(std::find(std::begin(two_image_ops), std::end(two_image_ops), args[i]) != std::end(two_image_ops)) {
+            if(file_exists(args[i+1])) {
+                Image second_image(args[i+1]);
+                first = flow_control(args[i], first, second_image);
+                i+=2;
+                continue;
+            }
+            std::cerr << error_message(args[i]) << std::endl;
+            return 1;
+        }
+        //check if the operation requires no additional arguments
+        else if(std::find(std::begin(one_image_ops), std::end(one_image_ops), args[i]) != std::end(one_image_ops)) {
+            first = flow_control(args[i], first);
+            i++;
+            continue;
+        }
+        //check if the operation requires a scaler quantity (int)
+        else if(std::find(std::begin(integer_ops), std::end(integer_ops), args[i]) != std::end(integer_ops)) {
+            try {
+                int scaler = std::stoi(args[i+1]);
+                scale_ops(args[i], first, scaler);
+                i+=2;
+                continue;
 
-
+            }
+            catch(std::invalid_argument) {
+                std::cerr << "Argument type not integer" << std::endl;
+                return 1;
+            }
+        }
+        else if(args[i] == "combine") {
+            if(file_exists(args[i+1]) && file_exists(args[i+2])) {
+                Image blue(args[i+2]);
+                Image green(args[i+1]);
+                first.combine_channels(blue, green, first);
+                i += 3;
+            }
+            else {
+                error_message(args[i+1]);
+                error_message(args[i+2]);
+                return 1;
+            }
+        }
+        else {
+            std::cerr << "Unknown operation." << std::endl;
+            return 1;
+        }
+    }
+    first.write(args[1]);
     return 0;
 }

@@ -137,6 +137,25 @@ void Image::rotate_180() {
 
     grid = flipped_grid;
 }
+
+void Image::only_red() {
+    for(int i = 0; i < num_Pixels; i++) {
+        grid[i][0] = grid[i][2];
+        grid[i][1] = grid[i][2];
+    }
+}
+void Image::only_green() {
+    for(int i = 0; i < num_Pixels; i++) {
+        grid[i][0] = grid[i][1];
+        grid[i][2] = grid[i][2];
+    }
+}
+void Image::only_blue() {
+    for(int i = 0; i < num_Pixels; i++) {
+        grid[i][1] = grid[i][0];
+        grid[i][2] = grid[i][0];
+    }
+}
 //============================================================================================
 //=================ALGORITHMS=================================================================
 //============================================================================================
@@ -220,6 +239,9 @@ void Image::add(int color_index, int scale) {
         int sum = static_cast<int>(grid[i][color_index]) + scale;
         if(sum > 255) {
             sum = 255;
+        }
+        if(sum < 0) {
+            sum = 0;
         }
         grid[i][color_index] = static_cast<unsigned char>(sum);
     }
