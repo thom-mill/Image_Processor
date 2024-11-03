@@ -203,11 +203,19 @@ bool file_exists(const std::string& path) {
     return (info.st_mode & S_IFREG) != 0;
 }
 
-std::string error_message(const std::string& filePath) {
-    if(filePath.substr(filePath.size() - 4, 4) != ".tga") {
-        return "Invalid file name.";
+std::string error_message(const std::string& filePath, bool type = 0) {
+    if(type == 0){
+        if(filePath.substr(filePath.size() - 4, 4) != ".tga") {
+            return "Invalid file name.";
+        }
+        return "File does not exist." ;
     }
-    return "File does not exist." ;
+    else {
+        if(filePath.substr(filePath.size() - 4, 4) != ".tga") {
+            return "Invalid argument, invalid file name.";
+        }
+        return "Invalid argument, file does not exist." ;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -261,7 +269,7 @@ int main(int argc, char* argv[])
                 i+=2;
                 continue;
             }
-            std::cerr << error_message(args[i+1]) << std::endl;
+            std::cerr << error_message(args[i+1], 1) << std::endl;
             return 1;
         }
         //check if the operation requires no additional arguments
@@ -284,7 +292,7 @@ int main(int argc, char* argv[])
 
             }
             catch(std::invalid_argument) {
-                std::cerr << "Argument type not integer" << std::endl;
+                std::cerr << "Invalid argument, expected number." << std::endl;
                 return 1;
             }
         }
