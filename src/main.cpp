@@ -251,13 +251,17 @@ int main(int argc, char* argv[])
     while(i < argc) {
         //check if the operation requires two images
         if(std::find(std::begin(two_image_ops), std::end(two_image_ops), args[i]) != std::end(two_image_ops)) {
+            if(argc < i + 2) { // check for a missing argument
+                std::cerr << "Missing argument." << std::endl;
+                return 1;
+            }
             if(file_exists(args[i+1])) {
                 Image second_image(args[i+1]);
                 first = flow_control(args[i], first, second_image);
                 i+=2;
                 continue;
             }
-            std::cerr << error_message(args[i]) << std::endl;
+            std::cerr << error_message(args[i+1]) << std::endl;
             return 1;
         }
         //check if the operation requires no additional arguments
@@ -268,6 +272,10 @@ int main(int argc, char* argv[])
         }
         //check if the operation requires a scaler quantity (int)
         else if(std::find(std::begin(integer_ops), std::end(integer_ops), args[i]) != std::end(integer_ops)) {
+            if(argc < i + 2) {
+                std::cerr << "Missing argument." << std::endl;
+                return 1;
+            }
             try {
                 int scaler = std::stoi(args[i+1]);
                 scale_ops(args[i], first, scaler);
@@ -294,7 +302,7 @@ int main(int argc, char* argv[])
             }
         }
         else {
-            std::cerr << "Unknown operation." << std::endl;
+            std::cerr << "Invalid method name." << std::endl;
             return 1;
         }
     }
